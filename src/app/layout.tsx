@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth/context";
 import { CategoriesProvider } from "@/lib/categories/context";
 import { MinistriesProvider } from "@/lib/ministries/context";
 import { CivicEducationProvider } from "@/lib/civic-education/context";
+import { AnnouncementsProvider } from "@/lib/announcements/context";
 
 export const metadata: Metadata = {
   title: "National Knowledge Hub - Sierra Leone",
@@ -24,7 +25,9 @@ export default function RootLayout({
           <MinistriesProvider>
             <CategoriesProvider>
               <CivicEducationProvider>
-                {children}
+                <AnnouncementsProvider>
+                  {children}
+                </AnnouncementsProvider>
               </CivicEducationProvider>
             </CategoriesProvider>
           </MinistriesProvider>

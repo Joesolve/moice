@@ -29,7 +29,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="/news" className="hover:text-white">
-                  News &amp; Reports
+                  News &amp; Announcements
                 </a>
               </li>
               <li>

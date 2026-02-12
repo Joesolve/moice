@@ -39,7 +39,7 @@ export default function Header() {
               href="/news"
               className="text-sm font-medium text-white/90 transition-colors hover:text-white"
             >
-              News &amp; Reports
+              News &amp; Announcements
             </Link>
             <Link
               href="/civic-education"
@@ -80,7 +80,7 @@ export default function Header() {
               className="block py-2 text-sm font-medium text-white/90"
               onClick={() => setMobileOpen(false)}
             >
-              News &amp; Reports
+              News &amp; Announcements
             </Link>
             <Link
               href="/civic-education"

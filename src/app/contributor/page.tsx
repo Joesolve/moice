@@ -12,18 +12,18 @@ import {
   BadgeCheck,
   XCircle,
   LogOut,
-  FileBarChart,
-  Upload,
+  Megaphone,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MOCK_DATA_POINTS, MOCK_MINISTRY_REPORTS } from "@/lib/mock-data";
+import { MOCK_DATA_POINTS } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/context";
 import { useCategories } from "@/lib/categories/context";
 import { useMinistries } from "@/lib/ministries/context";
+import { useAnnouncements } from "@/lib/announcements/context";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import type { DataPointStatus, ReportStatus } from "@/types";
+import type { DataPointStatus, AnnouncementStatus } from "@/types";
 
 const statusConfig: Record<
   DataPointStatus,
@@ -61,8 +61,8 @@ const statusConfig: Record<
   },
 };
 
-const reportStatusConfig: Record<
-  ReportStatus,
+const announcementStatusConfig: Record<
+  AnnouncementStatus,
   { icon: typeof Clock; color: string; bg: string; label: string }
 > = {
   draft: {
@@ -103,8 +103,9 @@ function ContributorContent() {
   const { user, logout } = useAuth();
   const { categories } = useCategories();
   const { ministries } = useMinistries();
+  const { announcements, addAnnouncement } = useAnnouncements();
   const router = useRouter();
-  const [activeSection, setActiveSection] = useState<"facts" | "reports">("facts");
+  const [activeSection, setActiveSection] = useState<"facts" | "announcements">("facts");
   const [view, setView] = useState<"list" | "new" | "success">("list");
   const [selectedMinistry, setSelectedMinistry] = useState("m1");
 
@@ -116,26 +117,32 @@ function ContributorContent() {
   const [tags, setTags] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
 
-  // Report form
-  const [reportTitle, setReportTitle] = useState("");
-  const [reportSummary, setReportSummary] = useState("");
-  const [reportBody, setReportBody] = useState("");
-  const [reportType, setReportType] = useState<"quarterly" | "annual" | "special" | "update">("quarterly");
-  const [reportPeriod, setReportPeriod] = useState("");
+  // Announcement form
+  const [annTitle, setAnnTitle] = useState("");
+  const [annSummary, setAnnSummary] = useState("");
+  const [annBody, setAnnBody] = useState("");
 
   const currentMinistry = ministries.find((m) => m.id === selectedMinistry);
 
   // Filter items by selected ministry
   const myItems = MOCK_DATA_POINTS.filter((dp) => dp.ministry_id === selectedMinistry);
-  const myReports = MOCK_MINISTRY_REPORTS.filter((r) => r.ministry_id === selectedMinistry);
+  const myAnnouncements = announcements.filter((a) => a.ministry_id === selectedMinistry);
 
   function handleFactSubmit(e: React.FormEvent) {
     e.preventDefault();
     setView("success");
   }
 
-  function handleReportSubmit(e: React.FormEvent) {
+  function handleAnnouncementSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!annTitle.trim() || !annSummary.trim() || !annBody.trim()) return;
+    addAnnouncement(
+      annTitle.trim(),
+      annSummary.trim(),
+      annBody.trim(),
+      selectedMinistry,
+      user?.email ?? "contributor",
+    );
     setView("success");
   }
 
@@ -146,11 +153,9 @@ function ContributorContent() {
     setCategoryId("");
     setTags("");
     setSourceUrl("");
-    setReportTitle("");
-    setReportSummary("");
-    setReportBody("");
-    setReportType("quarterly");
-    setReportPeriod("");
+    setAnnTitle("");
+    setAnnSummary("");
+    setAnnBody("");
     setView("list");
   }
 
@@ -222,15 +227,15 @@ function ContributorContent() {
             Fact Sheets
           </button>
           <button
-            onClick={() => { setActiveSection("reports"); setView("list"); }}
+            onClick={() => { setActiveSection("announcements"); setView("list"); }}
             className={`inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
-              activeSection === "reports"
+              activeSection === "announcements"
                 ? "bg-sl-green-500 text-white"
                 : "border border-sl-gray-200 bg-white text-sl-gray-600 hover:bg-sl-gray-50"
             }`}
           >
-            <FileBarChart className="h-4 w-4" />
-            Ministry Reports
+            <Megaphone className="h-4 w-4" />
+            Announcements
           </button>
         </div>
 
@@ -239,10 +244,10 @@ function ContributorContent() {
           <div className="mb-8 rounded-xl border border-sl-green-200 bg-sl-green-50 p-6 text-center">
             <CheckCircle className="mx-auto mb-3 h-12 w-12 text-sl-green-500" />
             <h2 className="text-lg font-bold text-sl-green-800">
-              {activeSection === "facts" ? "Fact Sheet Submitted" : "Report Submitted"}
+              {activeSection === "facts" ? "Fact Sheet Submitted" : "Announcement Submitted"}
             </h2>
             <p className="mt-1 text-sm text-sl-green-600">
-              Your {activeSection === "facts" ? "fact sheet" : "ministry report"} has been submitted for MOICE review. You will be
+              Your {activeSection === "facts" ? "fact sheet" : "announcement"} has been submitted for MOICE review. You will be
               notified once it is verified and published.
             </p>
             <button
@@ -442,44 +447,44 @@ function ContributorContent() {
           </div>
         )}
 
-        {/* MINISTRY REPORTS SECTION */}
-        {activeSection === "reports" && view === "list" && (
+        {/* ANNOUNCEMENTS SECTION */}
+        {activeSection === "announcements" && view === "list" && (
           <div>
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-sl-gray-900">
-                  Ministry Reports
+                  Announcements
                 </h1>
                 <p className="text-sm text-sl-gray-500">
-                  Submit quarterly, annual, and special reports for {currentMinistry?.abbreviation}
+                  Submit official announcements for {currentMinistry?.abbreviation}
                 </p>
               </div>
               <button
                 onClick={() => setView("new")}
                 className="inline-flex items-center gap-2 rounded-lg bg-sl-green-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sl-green-600"
               >
-                <Upload className="h-4 w-4" />
-                New Report
+                <Plus className="h-4 w-4" />
+                New Announcement
               </button>
             </div>
 
-            {myReports.length === 0 ? (
+            {myAnnouncements.length === 0 ? (
               <div className="rounded-xl border border-sl-gray-200 bg-white p-10 text-center">
-                <FileBarChart className="mx-auto mb-3 h-12 w-12 text-sl-gray-300" />
-                <p className="font-semibold text-sl-gray-700">No reports yet</p>
+                <Megaphone className="mx-auto mb-3 h-12 w-12 text-sl-gray-300" />
+                <p className="font-semibold text-sl-gray-700">No announcements yet</p>
                 <p className="text-sm text-sl-gray-500">
-                  Submit your first ministry report for {currentMinistry?.abbreviation}.
+                  Submit your first announcement for {currentMinistry?.abbreviation}.
                 </p>
               </div>
             ) : (
               <div className="space-y-3">
-                {myReports.map((report) => {
-                  const config = reportStatusConfig[report.status];
+                {myAnnouncements.map((ann) => {
+                  const config = announcementStatusConfig[ann.status];
                   const Icon = config.icon;
 
                   return (
                     <div
-                      key={report.id}
+                      key={ann.id}
                       className="rounded-xl border border-sl-gray-200 bg-white p-4 shadow-sm"
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -491,18 +496,15 @@ function ContributorContent() {
                               <Icon className="h-3.5 w-3.5" />
                               {config.label}
                             </span>
-                            <span className="rounded-full bg-sl-blue-50 px-2.5 py-1 text-xs font-medium text-sl-blue-700">
-                              {report.report_type.charAt(0).toUpperCase() + report.report_type.slice(1)} — {report.period}
-                            </span>
                           </div>
                           <p className="text-sm font-medium text-sl-gray-900">
-                            {report.title}
+                            {ann.title}
                           </p>
                           <p className="mt-1 text-xs text-sl-gray-500 line-clamp-2">
-                            {report.summary}
+                            {ann.summary}
                           </p>
                           <p className="mt-1 text-xs text-sl-gray-400">
-                            Submitted {formatDate(report.created_at)}
+                            Submitted {formatDate(ann.created_at)}
                           </p>
                         </div>
                       </div>
@@ -514,97 +516,64 @@ function ContributorContent() {
           </div>
         )}
 
-        {activeSection === "reports" && view === "new" && (
+        {activeSection === "announcements" && view === "new" && (
           <div>
             <button
               onClick={() => setView("list")}
               className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-sl-gray-500 hover:text-sl-gray-700"
             >
               <ChevronLeft className="h-4 w-4" />
-              Back to reports
+              Back to announcements
             </button>
 
             <div className="rounded-xl border border-sl-gray-200 bg-white p-6 shadow-sm">
               <h2 className="mb-1 text-xl font-bold text-sl-gray-900">
-                Submit Ministry Report
+                Submit Announcement
               </h2>
               <p className="mb-6 text-sm text-sl-gray-500">
-                Submit an official report from <span className="font-semibold">{currentMinistry?.name}</span> for publication.
+                Submit an official announcement from <span className="font-semibold">{currentMinistry?.name}</span> for publication.
               </p>
 
-              <form onSubmit={handleReportSubmit} className="space-y-5">
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-sl-gray-700">
-                      Report Type *
-                    </label>
-                    <select
-                      value={reportType}
-                      onChange={(e) => setReportType(e.target.value as typeof reportType)}
-                      required
-                      className="h-11 w-full rounded-lg border border-sl-gray-300 px-3 text-sm focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
-                    >
-                      <option value="quarterly">Quarterly Report</option>
-                      <option value="annual">Annual Report</option>
-                      <option value="special">Special Report</option>
-                      <option value="update">Progress Update</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-sl-gray-700">
-                      Reporting Period *
-                    </label>
-                    <input
-                      type="text"
-                      value={reportPeriod}
-                      onChange={(e) => setReportPeriod(e.target.value)}
-                      required
-                      className="h-11 w-full rounded-lg border border-sl-gray-300 px-3 text-sm focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
-                      placeholder="e.g., Q4 2025 or FY2025"
-                    />
-                  </div>
-                </div>
-
+              <form onSubmit={handleAnnouncementSubmit} className="space-y-5">
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-sl-gray-700">
-                    Report Title *
+                    Announcement Title *
                   </label>
                   <input
                     type="text"
-                    value={reportTitle}
-                    onChange={(e) => setReportTitle(e.target.value)}
+                    value={annTitle}
+                    onChange={(e) => setAnnTitle(e.target.value)}
                     required
                     className="h-11 w-full rounded-lg border border-sl-gray-300 px-3 text-sm focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
-                    placeholder="e.g., Q4 2025 Health Sector Performance Report"
+                    placeholder="e.g., Free Healthcare Services Extended Nationwide"
                   />
                 </div>
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-sl-gray-700">
-                    Executive Summary *
+                    Summary *
                   </label>
                   <textarea
-                    value={reportSummary}
-                    onChange={(e) => setReportSummary(e.target.value)}
+                    value={annSummary}
+                    onChange={(e) => setAnnSummary(e.target.value)}
                     required
                     rows={3}
                     className="w-full rounded-lg border border-sl-gray-300 px-3 py-2.5 text-sm focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
-                    placeholder="A brief executive summary of the report findings"
+                    placeholder="A brief summary of the announcement shown in listings"
                   />
                 </div>
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-sl-gray-700">
-                    Full Report Content *
+                    Full Announcement *
                   </label>
                   <textarea
-                    value={reportBody}
-                    onChange={(e) => setReportBody(e.target.value)}
+                    value={annBody}
+                    onChange={(e) => setAnnBody(e.target.value)}
                     required
-                    rows={12}
+                    rows={10}
                     className="w-full rounded-lg border border-sl-gray-300 px-3 py-2.5 text-sm focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
-                    placeholder="Full report content including key achievements, challenges, statistics, and recommendations"
+                    placeholder="Full announcement content with all relevant details, dates, and instructions for the public"
                   />
                 </div>
 
@@ -614,7 +583,7 @@ function ContributorContent() {
                     className="inline-flex items-center gap-2 rounded-lg bg-sl-green-500 px-6 py-2.5 text-sm font-semibold text-white hover:bg-sl-green-600"
                   >
                     <Send className="h-4 w-4" />
-                    Submit Report
+                    Submit Announcement
                   </button>
                   <button
                     type="button"

@@ -81,6 +81,22 @@ export interface MinistryReport {
   published_at: string | null;
 }
 
+export type AnnouncementStatus = "draft" | "submitted" | "published" | "rejected";
+
+export interface Announcement {
+  id: string;
+  title: string;
+  summary: string;
+  body: string;
+  ministry_id: string;
+  ministry?: Ministry;
+  submitted_by: string;
+  status: AnnouncementStatus;
+  created_at: string;
+  updated_at: string;
+  published_at: string | null;
+}
+
 export interface CivicEducationTopic {
   id: string;
   title: string;

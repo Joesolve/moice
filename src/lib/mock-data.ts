@@ -1,4 +1,4 @@
-import type { DataPoint, Ministry, Category, MinistryReport, NewsArticle, CivicEducationTopic } from "@/types";
+import type { DataPoint, Ministry, Category, MinistryReport, NewsArticle, CivicEducationTopic, Announcement } from "@/types";
 
 export const MINISTRIES: Ministry[] = [
   {
@@ -370,6 +370,74 @@ export const MOCK_NEWS: NewsArticle[] = [
     published_at: "2026-01-10T12:00:00Z",
     is_featured: false,
     tags: ["agriculture", "rice", "food security", "farming"],
+  },
+];
+
+export const MOCK_ANNOUNCEMENTS: Announcement[] = [
+  {
+    id: "ann1",
+    title: "Free Healthcare Services Extended to All Pregnant Women Nationwide",
+    summary: "MoHS announces the expansion of the Free Health Care Initiative to cover all pregnant women regardless of age, effective immediately across all 16 districts.",
+    body: "The Ministry of Health and Sanitation is pleased to announce that the Free Health Care Initiative has been expanded to cover all pregnant women nationwide, removing previous age-related restrictions. This policy change takes effect immediately and applies to all government health facilities across all 16 districts. Pregnant women can now access free antenatal care, delivery services, and postnatal care at any public health facility by presenting their national ID or voter registration card. Community Health Workers in each chiefdom have been briefed and can assist with facility referrals.",
+    ministry_id: "m1",
+    ministry: MINISTRIES[0],
+    submitted_by: "user1",
+    status: "published",
+    created_at: "2026-02-08T09:00:00Z",
+    updated_at: "2026-02-09T11:00:00Z",
+    published_at: "2026-02-09T11:00:00Z",
+  },
+  {
+    id: "ann2",
+    title: "New Tax Filing Deadline for Small Businesses — Extended to March 31",
+    summary: "The Ministry of Finance extends the FY2025 tax filing deadline for small and medium enterprises to 31 March 2026.",
+    body: "The Ministry of Finance hereby announces that the tax filing deadline for small and medium enterprises (SMEs) for fiscal year 2025 has been extended from 28 February to 31 March 2026. This extension applies to all businesses with annual turnover below Le 500 million. Businesses can file returns online through the National Revenue Authority portal or in person at any district NRA office. Late penalties will not be applied for filings received before the new deadline. For assistance, SMEs can call the NRA helpline or visit their nearest district tax office.",
+    ministry_id: "m2",
+    ministry: MINISTRIES[1],
+    submitted_by: "user2",
+    status: "published",
+    created_at: "2026-02-05T08:00:00Z",
+    updated_at: "2026-02-06T10:00:00Z",
+    published_at: "2026-02-06T10:00:00Z",
+  },
+  {
+    id: "ann3",
+    title: "WASSCE Registration Opens for 2026 — Free for FQSE Students",
+    summary: "MBSSE confirms that WASSCE 2026 registration is now open and exam fees are fully covered for all students enrolled under the FQSE programme.",
+    body: "The Ministry of Basic and Senior Secondary Education announces that registration for the 2026 West African Senior School Certificate Examination (WASSCE) is now open. All students enrolled under the Free Quality School Education (FQSE) programme will have their examination fees fully covered by the government. School principals are advised to submit student lists to their District Education Offices by 15 March 2026. Private candidates may register directly at designated NEC centres. The examination is scheduled to begin in May 2026.",
+    ministry_id: "m3",
+    ministry: MINISTRIES[2],
+    submitted_by: "user3",
+    status: "published",
+    created_at: "2026-02-01T07:00:00Z",
+    updated_at: "2026-02-02T09:30:00Z",
+    published_at: "2026-02-02T09:30:00Z",
+  },
+  {
+    id: "ann4",
+    title: "Temporary Road Closure: Freetown-Waterloo Highway for Bridge Repairs",
+    summary: "MoWPA advises that the Freetown-Waterloo Highway will be partially closed for 3 weeks starting 17 February for emergency bridge reinforcement.",
+    body: "The Ministry of Works and Public Assets informs the public that a section of the Freetown-Waterloo Highway near the Allen Town junction will be partially closed for emergency bridge reinforcement works beginning 17 February 2026. The closure will last approximately 3 weeks. A single-lane alternating traffic system will be in place during daytime hours (6am–6pm). Motorists are advised to use the Hill Station alternative route during peak hours. Heavy commercial vehicles over 30 tonnes are temporarily prohibited on this section. Updates will be posted at the ministry's notice boards and broadcast on community radio.",
+    ministry_id: "m4",
+    ministry: MINISTRIES[3],
+    submitted_by: "user4",
+    status: "submitted",
+    created_at: "2026-02-10T06:00:00Z",
+    updated_at: "2026-02-10T06:00:00Z",
+    published_at: null,
+  },
+  {
+    id: "ann5",
+    title: "National Town Hall Series on Government Transparency Begins March 1",
+    summary: "MOICE launches a 16-district town hall tour to explain the National Knowledge Hub and gather citizen feedback on government data priorities.",
+    body: "The Ministry of Information and Civic Education is pleased to announce a series of town hall meetings across all 16 districts beginning 1 March 2026. The tour will introduce the National Knowledge Hub to communities, demonstrate how citizens can use the platform to access verified government data, and gather feedback on what information the public needs most. Each session will include presentations in local languages, live demonstrations, and an open Q&A with district officials. Dates and venues for each district will be announced on community radio and at district council offices. All citizens are welcome to attend.",
+    ministry_id: "m5",
+    ministry: MINISTRIES[4],
+    submitted_by: "admin1",
+    status: "published",
+    created_at: "2026-02-07T10:00:00Z",
+    updated_at: "2026-02-08T14:00:00Z",
+    published_at: "2026-02-08T14:00:00Z",
   },
 ];
 

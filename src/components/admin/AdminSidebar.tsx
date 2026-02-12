@@ -9,7 +9,7 @@ import {
   History,
   LogOut,
   ChevronLeft,
-  FileBarChart,
+  Megaphone,
   Tag,
   GraduationCap,
 } from "lucide-react";
@@ -25,7 +25,7 @@ interface AdminSidebarProps {
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "review", label: "Review Queue", icon: FileCheck },
-  { id: "reports", label: "Ministry Reports", icon: FileBarChart },
+  { id: "reports", label: "Announcements", icon: Megaphone },
   { id: "categories", label: "Categories", icon: Tag },
   { id: "ministries", label: "Ministries", icon: Building2 },
   { id: "civic-education", label: "Civic Education", icon: GraduationCap },
