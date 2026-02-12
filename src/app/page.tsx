@@ -5,33 +5,88 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SearchBar from "@/components/search/SearchBar";
 import SearchResults from "@/components/search/SearchResults";
+import FilterBar from "@/components/search/FilterBar";
+import type { FilterValues } from "@/components/search/FilterBar";
 import StatsBar from "@/components/cards/StatsBar";
-import { searchMockData, MOCK_DATA_POINTS } from "@/lib/mock-data";
+import { searchMockData, MOCK_DATA_POINTS, MINISTRIES } from "@/lib/mock-data";
 import type { DataPoint } from "@/types";
-import { Shield, FileCheck, Eye } from "lucide-react";
+import { Shield, FileCheck, Eye, SlidersHorizontal } from "lucide-react";
 
 export default function HomePage() {
   const [results, setResults] = useState<DataPoint[]>([]);
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<FilterValues>({
+    ministryId: "",
+    dateFrom: "",
+    dateTo: "",
+  });
 
-  const handleSearch = useCallback((searchQuery: string) => {
-    setQuery(searchQuery);
-    setIsLoading(true);
-    setHasSearched(true);
+  const runSearch = useCallback(
+    (searchQuery: string, currentFilters: FilterValues) => {
+      setIsLoading(true);
+      setHasSearched(true);
 
-    // Simulate network latency for realism
-    setTimeout(() => {
-      const found = searchMockData(searchQuery);
-      setResults(found);
-      setIsLoading(false);
-    }, 400);
-  }, []);
+      setTimeout(() => {
+        const found = searchMockData({
+          query: searchQuery,
+          ministryId: currentFilters.ministryId || undefined,
+          dateFrom: currentFilters.dateFrom || undefined,
+          dateTo: currentFilters.dateTo || undefined,
+        });
+        setResults(found);
+        setIsLoading(false);
+      }, 400);
+    },
+    []
+  );
+
+  const handleSearch = useCallback(
+    (searchQuery: string) => {
+      setQuery(searchQuery);
+      runSearch(searchQuery, filters);
+    },
+    [filters, runSearch]
+  );
+
+  const handleFilterChange = useCallback(
+    (newFilters: FilterValues) => {
+      setFilters(newFilters);
+      runSearch(query, newFilters);
+    },
+    [query, runSearch]
+  );
+
+  const hasActiveFilters =
+    filters.ministryId || filters.dateFrom || filters.dateTo;
+
+  const activeFilterCount = [
+    filters.ministryId,
+    filters.dateFrom,
+    filters.dateTo,
+  ].filter(Boolean).length;
 
   const verifiedCount = MOCK_DATA_POINTS.filter(
     (dp) => dp.status === "verified"
   ).length;
+
+  // Build a human-readable filter description
+  const filterDescription = () => {
+    const parts: string[] = [];
+    if (filters.ministryId) {
+      const m = MINISTRIES.find((m) => m.id === filters.ministryId);
+      if (m) parts.push(m.abbreviation);
+    }
+    if (filters.dateFrom || filters.dateTo) {
+      if (filters.dateFrom && filters.dateTo)
+        parts.push(`${filters.dateFrom} to ${filters.dateTo}`);
+      else if (filters.dateFrom) parts.push(`from ${filters.dateFrom}`);
+      else parts.push(`until ${filters.dateTo}`);
+    }
+    return parts.length ? parts.join(", ") : "";
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -59,9 +114,39 @@ export default function HomePage() {
             {/* Search */}
             <div id="search" className="mx-auto max-w-2xl">
               <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+
+              {/* Filter toggle */}
+              <div className="mt-3 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setShowFilters((prev) => !prev)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                    showFilters || hasActiveFilters
+                      ? "bg-white text-sl-green-700"
+                      : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  Filter by Ministry & Date
+                  {activeFilterCount > 0 && (
+                    <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-sl-green-500 text-[10px] font-bold text-white">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </section>
+
+        {/* Filter bar (collapsible) */}
+        {showFilters && (
+          <section className="border-b border-sl-gray-200 bg-sl-gray-50 px-4 py-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-4xl">
+              <FilterBar filters={filters} onChange={handleFilterChange} />
+            </div>
+          </section>
+        )}
 
         {/* Trust pillars */}
         <section className="border-b border-sl-gray-200 bg-white px-4 py-8 sm:px-6 lg:px-8">
@@ -111,11 +196,42 @@ export default function HomePage() {
         <section className="px-4 pb-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
             {hasSearched ? (
-              <SearchResults
-                results={results}
-                query={query}
-                isLoading={isLoading}
-              />
+              <div>
+                <div className="mb-4">
+                  <p className="text-sm text-sl-gray-500">
+                    Showing{" "}
+                    <span className="font-semibold text-sl-gray-700">
+                      {results.length}
+                    </span>{" "}
+                    verified result{results.length !== 1 ? "s" : ""}
+                    {query && (
+                      <>
+                        {" "}
+                        for &quot;
+                        <span className="font-semibold text-sl-gray-700">
+                          {query}
+                        </span>
+                        &quot;
+                      </>
+                    )}
+                    {filterDescription() && (
+                      <>
+                        {" "}
+                        &middot; Filtered by{" "}
+                        <span className="font-semibold text-sl-gray-700">
+                          {filterDescription()}
+                        </span>
+                      </>
+                    )}
+                  </p>
+                </div>
+                <SearchResults
+                  results={results}
+                  query={query}
+                  isLoading={isLoading}
+                  hasFilters={!!hasActiveFilters}
+                />
+              </div>
             ) : (
               <div>
                 <h2 className="mb-4 text-xl font-bold text-sl-gray-900">

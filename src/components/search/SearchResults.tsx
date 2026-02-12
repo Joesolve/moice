@@ -10,12 +10,14 @@ interface SearchResultsProps {
   results: DataPoint[];
   query: string;
   isLoading?: boolean;
+  hasFilters?: boolean;
 }
 
 export default function SearchResults({
   results,
   query,
   isLoading,
+  hasFilters,
 }: SearchResultsProps) {
   const [selected, setSelected] = useState<DataPoint | null>(null);
 
@@ -45,7 +47,7 @@ export default function SearchResults({
     );
   }
 
-  if (query && results.length === 0) {
+  if ((query || hasFilters) && results.length === 0) {
     return (
       <div className="rounded-xl border border-sl-gray-200 bg-white p-10 text-center">
         <SearchX className="mx-auto mb-3 h-12 w-12 text-sl-gray-300" />
@@ -53,7 +55,10 @@ export default function SearchResults({
           No results found
         </h3>
         <p className="mt-1 text-sm text-sl-gray-500">
-          No verified data matches &quot;{query}&quot;. Try different keywords or
+          {query
+            ? `No verified data matches "${query}".`
+            : "No verified data matches the selected filters."}{" "}
+          Try different keywords{hasFilters ? ", adjust your filters," : ""} or
           browse by category.
         </p>
       </div>
@@ -61,26 +66,14 @@ export default function SearchResults({
   }
 
   return (
-    <div>
-      {query && (
-        <p className="mb-4 text-sm text-sl-gray-500">
-          Showing{" "}
-          <span className="font-semibold text-sl-gray-700">
-            {results.length}
-          </span>{" "}
-          verified result{results.length !== 1 ? "s" : ""} for &quot;
-          <span className="font-semibold text-sl-gray-700">{query}</span>&quot;
-        </p>
-      )}
-      <div className="space-y-4">
-        {results.map((dp) => (
-          <VerifiedDataCard
-            key={dp.id}
-            dataPoint={dp}
-            onSelect={setSelected}
-          />
-        ))}
-      </div>
+    <div className="space-y-4">
+      {results.map((dp) => (
+        <VerifiedDataCard
+          key={dp.id}
+          dataPoint={dp}
+          onSelect={setSelected}
+        />
+      ))}
     </div>
   );
 }

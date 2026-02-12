@@ -373,28 +373,58 @@ export const MOCK_NEWS: NewsArticle[] = [
   },
 ];
 
-export function searchMockData(query: string): DataPoint[] {
-  if (!query.trim()) {
-    return MOCK_DATA_POINTS.filter((dp) => dp.status === "verified");
+export interface SearchFilters {
+  query?: string;
+  ministryId?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}
+
+export function searchMockData(filters: SearchFilters | string): DataPoint[] {
+  // Support legacy string-only calls
+  const { query = "", ministryId, dateFrom, dateTo } =
+    typeof filters === "string" ? { query: filters } : filters;
+
+  let results = MOCK_DATA_POINTS.filter((dp) => dp.status === "verified");
+
+  // Filter by ministry
+  if (ministryId) {
+    results = results.filter((dp) => dp.ministry_id === ministryId);
   }
 
-  const terms = query.toLowerCase().split(/\s+/);
+  // Filter by date range (uses verified_at date)
+  if (dateFrom) {
+    const from = new Date(dateFrom);
+    results = results.filter(
+      (dp) => dp.verified_at && new Date(dp.verified_at) >= from
+    );
+  }
+  if (dateTo) {
+    const to = new Date(dateTo);
+    to.setHours(23, 59, 59, 999);
+    results = results.filter(
+      (dp) => dp.verified_at && new Date(dp.verified_at) <= to
+    );
+  }
 
-  return MOCK_DATA_POINTS.filter((dp) => {
-    if (dp.status !== "verified") return false;
+  // Filter by text query
+  if (query.trim()) {
+    const terms = query.toLowerCase().split(/\s+/);
+    results = results.filter((dp) => {
+      const searchable = [
+        dp.title,
+        dp.summary,
+        dp.body,
+        dp.ministry?.name ?? "",
+        dp.ministry?.abbreviation ?? "",
+        dp.category?.name ?? "",
+        ...dp.tags,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return terms.every((term) => searchable.includes(term));
+    });
+  }
 
-    const searchable = [
-      dp.title,
-      dp.summary,
-      dp.body,
-      dp.ministry?.name ?? "",
-      dp.ministry?.abbreviation ?? "",
-      dp.category?.name ?? "",
-      ...dp.tags,
-    ]
-      .join(" ")
-      .toLowerCase();
-
-    return terms.every((term) => searchable.includes(term));
-  });
+  return results;
 }

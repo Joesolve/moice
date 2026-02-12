@@ -12,23 +12,25 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get("q") ?? "";
   const category = searchParams.get("category");
   const ministry = searchParams.get("ministry");
+  const dateFrom = searchParams.get("date_from");
+  const dateTo = searchParams.get("date_to");
 
-  let results = query ? searchMockData(query) : MOCK_DATA_POINTS.filter(dp => dp.status === "verified");
+  let results = searchMockData({
+    query,
+    ministryId: ministry ?? undefined,
+    dateFrom: dateFrom ?? undefined,
+    dateTo: dateTo ?? undefined,
+  });
 
-  // Filter by category slug
+  // Filter by category slug (additional filter on top of searchMockData)
   if (category) {
     results = results.filter((dp) => dp.category?.slug === category);
-  }
-
-  // Filter by ministry ID
-  if (ministry) {
-    results = results.filter((dp) => dp.ministry_id === ministry);
   }
 
   return NextResponse.json({
     success: true,
     query,
-    filters: { category, ministry },
+    filters: { category, ministry, date_from: dateFrom, date_to: dateTo },
     total: results.length,
     data: results.map((dp) => ({
       id: dp.id,
