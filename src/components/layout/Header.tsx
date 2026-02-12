@@ -29,9 +29,12 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-6 md:flex">
-            <span className="text-sm font-medium text-white">
+            <Link
+              href="/"
+              className="text-sm font-medium text-white/90 transition-colors hover:text-white"
+            >
               Search Data
-            </span>
+            </Link>
             <Link
               href="/news"
               className="text-sm font-medium text-white/90 transition-colors hover:text-white"
@@ -59,9 +62,13 @@ export default function Header() {
         {/* Mobile nav */}
         {mobileOpen && (
           <nav className="border-t border-sl-green-400 pb-4 pt-2 md:hidden">
-            <span className="block py-2 text-sm font-medium text-white">
+            <Link
+              href="/"
+              className="block py-2 text-sm font-medium text-white/90"
+              onClick={() => setMobileOpen(false)}
+            >
               Search Data
-            </span>
+            </Link>
             <Link
               href="/news"
               className="block py-2 text-sm font-medium text-white/90"
