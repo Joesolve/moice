@@ -1,3 +1,0 @@
-module.exports=[27572,a=>{"use strict";var b=a.i(7997);function c({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{className:"min-h-screen bg-sl-gray-50 text-sl-gray-900 antialiased",children:a})})}a.s(["default",()=>c,"metadata",0,{title:"National Knowledge Hub - Sierra Leone",description:"The official central repository for verified government data from the Republic of Sierra Leone. Search verified facts, statistics, and reports from all government ministries.",keywords:["Sierra Leone","government data","MOICE","verified data","transparency"]}])}];
-
-//# sourceMappingURL=src_app_layout_tsx_cc8184fa._.js.map
