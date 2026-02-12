@@ -29,18 +29,9 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-6 md:flex">
-            <Link
-              href="/"
-              className="text-sm font-medium text-white/90 transition-colors hover:text-white"
-            >
-              Home
-            </Link>
-            <Link
-              href="/#search"
-              className="text-sm font-medium text-white/90 transition-colors hover:text-white"
-            >
+            <span className="text-sm font-medium text-white">
               Search Data
-            </Link>
+            </span>
             <Link
               href="/news"
               className="text-sm font-medium text-white/90 transition-colors hover:text-white"
@@ -68,20 +59,9 @@ export default function Header() {
         {/* Mobile nav */}
         {mobileOpen && (
           <nav className="border-t border-sl-green-400 pb-4 pt-2 md:hidden">
-            <Link
-              href="/"
-              className="block py-2 text-sm font-medium text-white/90"
-              onClick={() => setMobileOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/#search"
-              className="block py-2 text-sm font-medium text-white/90"
-              onClick={() => setMobileOpen(false)}
-            >
+            <span className="block py-2 text-sm font-medium text-white">
               Search Data
-            </Link>
+            </span>
             <Link
               href="/news"
               className="block py-2 text-sm font-medium text-white/90"
