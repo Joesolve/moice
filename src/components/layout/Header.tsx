@@ -42,10 +42,16 @@ export default function Header() {
               Search Data
             </Link>
             <Link
-              href="/admin"
+              href="/news"
+              className="text-sm font-medium text-white/90 transition-colors hover:text-white"
+            >
+              News &amp; Reports
+            </Link>
+            <Link
+              href="/login"
               className="rounded-md bg-sl-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sl-blue-600"
             >
-              Admin Portal
+              Sign In
             </Link>
           </nav>
 
@@ -77,11 +83,18 @@ export default function Header() {
               Search Data
             </Link>
             <Link
-              href="/admin"
+              href="/news"
+              className="block py-2 text-sm font-medium text-white/90"
+              onClick={() => setMobileOpen(false)}
+            >
+              News &amp; Reports
+            </Link>
+            <Link
+              href="/login"
               className="mt-2 block rounded-md bg-sl-blue-500 px-4 py-2 text-center text-sm font-semibold text-white"
               onClick={() => setMobileOpen(false)}
             >
-              Admin Portal
+              Sign In
             </Link>
           </nav>
         )}

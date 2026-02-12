@@ -11,6 +11,7 @@ import {
   ExternalLink,
   History,
 } from "lucide-react";
+import ShareButtons from "@/components/cards/ShareButtons";
 
 interface DataPointDetailProps {
   dataPoint: DataPoint;
@@ -110,8 +111,19 @@ export default function DataPointDetail({
           </div>
         )}
 
+        {/* Social sharing */}
+        {dataPoint.status === "verified" && (
+          <div className="mt-6 border-t border-sl-gray-100 pt-4">
+            <ShareButtons
+              title={dataPoint.title}
+              summary={dataPoint.summary}
+              dataPointId={dataPoint.id}
+            />
+          </div>
+        )}
+
         {/* Footer links */}
-        <div className="mt-6 flex flex-wrap gap-4 border-t border-sl-gray-100 pt-4">
+        <div className="mt-4 flex flex-wrap gap-4 border-t border-sl-gray-100 pt-4">
           {dataPoint.source_url && (
             <a
               href={dataPoint.source_url}

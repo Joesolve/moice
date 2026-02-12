@@ -3,32 +3,34 @@
 import { useState } from "react";
 import { Shield, LogIn, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth/context";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { login } = useAuth();
+  const router = useRouter();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    // Mock login — in production this calls supabase.auth.signInWithPassword
-    setTimeout(() => {
-      if (email === "admin@moice.gov.sl" && password === "admin123") {
-        window.location.href = "/admin";
-      } else if (
-        email === "contributor@mohs.gov.sl" &&
-        password === "contributor123"
-      ) {
-        window.location.href = "/contributor";
+    const result = await login(email, password);
+
+    if (result.success) {
+      if (email.includes("admin")) {
+        router.push("/admin");
       } else {
-        setError("Invalid credentials. Use the demo accounts shown below.");
+        router.push("/contributor");
       }
-      setIsLoading(false);
-    }, 800);
+    } else {
+      setError(result.error ?? "Login failed");
+    }
+    setIsLoading(false);
   }
 
   return (

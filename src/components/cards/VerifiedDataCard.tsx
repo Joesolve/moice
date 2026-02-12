@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import type { DataPoint } from "@/types";
 import { formatRelativeDate, truncate } from "@/lib/utils";
+import ShareButtons from "@/components/cards/ShareButtons";
 
 interface VerifiedDataCardProps {
   dataPoint: DataPoint;
@@ -109,6 +110,17 @@ export default function VerifiedDataCard({
               +{dataPoint.tags.length - 4} more
             </span>
           )}
+        </div>
+      )}
+
+      {/* Social sharing */}
+      {isVerified && (
+        <div className="mt-4 border-t border-sl-gray-100 pt-3">
+          <ShareButtons
+            title={dataPoint.title}
+            summary={dataPoint.summary}
+            dataPointId={dataPoint.id}
+          />
         </div>
       )}
     </article>

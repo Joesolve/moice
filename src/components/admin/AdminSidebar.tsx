@@ -9,8 +9,11 @@ import {
   History,
   LogOut,
   ChevronLeft,
+  FileBarChart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth/context";
+import { useRouter } from "next/navigation";
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -20,6 +23,7 @@ interface AdminSidebarProps {
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "review", label: "Review Queue", icon: FileCheck },
+  { id: "reports", label: "Ministry Reports", icon: FileBarChart },
   { id: "ministries", label: "Ministries", icon: Building2 },
   { id: "audit", label: "Audit Trail", icon: History },
 ];
@@ -28,6 +32,9 @@ export default function AdminSidebar({
   activeTab,
   onTabChange,
 }: AdminSidebarProps) {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-sl-gray-200 bg-white">
       {/* Logo */}
@@ -69,9 +76,9 @@ export default function AdminSidebar({
       <div className="border-t border-sl-gray-200 p-3">
         <div className="mb-3 rounded-lg bg-sl-gray-50 px-3 py-2">
           <p className="text-xs font-semibold text-sl-gray-700">
-            Admin User
+            {user?.name ?? "Admin User"}
           </p>
-          <p className="text-[11px] text-sl-gray-500">admin@moice.gov.sl</p>
+          <p className="text-[11px] text-sl-gray-500">{user?.email ?? "admin@moice.gov.sl"}</p>
         </div>
         <div className="flex gap-2">
           <Link
@@ -81,13 +88,13 @@ export default function AdminSidebar({
             <ChevronLeft className="h-3.5 w-3.5" />
             Public Site
           </Link>
-          <Link
-            href="/login"
+          <button
+            onClick={() => { logout(); router.push("/login"); }}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-sl-gray-200 py-2 text-xs font-medium text-sl-gray-600 hover:bg-sl-gray-50"
           >
             <LogOut className="h-3.5 w-3.5" />
             Sign Out
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

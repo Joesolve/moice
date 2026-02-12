@@ -61,3 +61,36 @@ export interface SearchResult {
   total: number;
   query: string;
 }
+
+export type ReportStatus = "draft" | "submitted" | "published" | "rejected";
+
+export interface MinistryReport {
+  id: string;
+  title: string;
+  summary: string;
+  body: string;
+  ministry_id: string;
+  ministry?: Ministry;
+  submitted_by: string;
+  status: ReportStatus;
+  report_type: "quarterly" | "annual" | "special" | "update";
+  period: string;
+  attachments: string[];
+  created_at: string;
+  updated_at: string;
+  published_at: string | null;
+}
+
+export interface NewsArticle {
+  id: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  ministry_id: string;
+  ministry?: Ministry;
+  category: string;
+  image_url: string | null;
+  published_at: string;
+  is_featured: boolean;
+  tags: string[];
+}

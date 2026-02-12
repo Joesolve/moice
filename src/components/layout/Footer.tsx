@@ -28,13 +28,13 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/admin" className="hover:text-white">
-                  Admin Portal
+                <a href="/news" className="hover:text-white">
+                  News &amp; Reports
                 </a>
               </li>
               <li>
-                <a href="/contributor" className="hover:text-white">
-                  Contributor Portal
+                <a href="/login" className="hover:text-white">
+                  Sign In
                 </a>
               </li>
             </ul>

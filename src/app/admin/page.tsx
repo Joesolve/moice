@@ -6,15 +6,26 @@ import DashboardView from "@/components/admin/DashboardView";
 import ReviewQueueView from "@/components/admin/ReviewQueueView";
 import MinistriesView from "@/components/admin/MinistriesView";
 import AuditTrailView from "@/components/admin/AuditTrailView";
-import { Menu, X } from "lucide-react";
+import ReportsView from "@/components/admin/ReportsView";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { Menu } from "lucide-react";
 
 export default function AdminPage() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <AdminContent />
+    </ProtectedRoute>
+  );
+}
+
+function AdminContent() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const views: Record<string, React.ReactNode> = {
     dashboard: <DashboardView />,
     review: <ReviewQueueView />,
+    reports: <ReportsView />,
     ministries: <MinistriesView />,
     audit: <AuditTrailView />,
   };
