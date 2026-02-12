@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronLeft,
   FileBarChart,
+  Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/context";
@@ -24,6 +25,7 @@ const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "review", label: "Review Queue", icon: FileCheck },
   { id: "reports", label: "Ministry Reports", icon: FileBarChart },
+  { id: "categories", label: "Categories", icon: Tag },
   { id: "ministries", label: "Ministries", icon: Building2 },
   { id: "audit", label: "Audit Trail", icon: History },
 ];

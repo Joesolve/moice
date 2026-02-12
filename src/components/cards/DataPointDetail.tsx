@@ -8,7 +8,6 @@ import {
   Building2,
   Calendar,
   Tag,
-  ExternalLink,
   History,
 } from "lucide-react";
 import ShareButtons from "@/components/cards/ShareButtons";
@@ -124,17 +123,6 @@ export default function DataPointDetail({
 
         {/* Footer links */}
         <div className="mt-4 flex flex-wrap gap-4 border-t border-sl-gray-100 pt-4">
-          {dataPoint.source_url && (
-            <a
-              href={dataPoint.source_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-sl-blue-500 hover:text-sl-blue-600"
-            >
-              <ExternalLink className="h-4 w-4" />
-              View original source
-            </a>
-          )}
           <button className="inline-flex items-center gap-1.5 text-sm font-medium text-sl-gray-500 hover:text-sl-gray-700">
             <History className="h-4 w-4" />
             View audit trail

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth/context";
+import { CategoriesProvider } from "@/lib/categories/context";
 
 export const metadata: Metadata = {
   title: "National Knowledge Hub - Sierra Leone",
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-sl-gray-50 text-sl-gray-900 antialiased">
         <AuthProvider>
-          {children}
+          <CategoriesProvider>
+            {children}
+          </CategoriesProvider>
         </AuthProvider>
       </body>
     </html>

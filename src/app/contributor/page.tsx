@@ -17,9 +17,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CATEGORIES, MOCK_DATA_POINTS, MINISTRIES, MOCK_MINISTRY_REPORTS } from "@/lib/mock-data";
+import { MOCK_DATA_POINTS, MINISTRIES, MOCK_MINISTRY_REPORTS } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/context";
+import { useCategories } from "@/lib/categories/context";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import type { DataPointStatus, ReportStatus } from "@/types";
 
@@ -99,6 +100,7 @@ export default function ContributorPage() {
 
 function ContributorContent() {
   const { user, logout } = useAuth();
+  const { categories } = useCategories();
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<"facts" | "reports">("facts");
   const [view, setView] = useState<"list" | "new" | "success">("list");
@@ -355,7 +357,7 @@ function ContributorContent() {
                     className="h-11 w-full rounded-lg border border-sl-gray-300 px-3 text-sm focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
                   >
                     <option value="">Select a category</option>
-                    {CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <option key={cat.id} value={cat.id}>
                         {cat.name}
                       </option>

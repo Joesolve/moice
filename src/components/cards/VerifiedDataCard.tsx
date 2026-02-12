@@ -3,7 +3,6 @@ import {
   Clock,
   Building2,
   Tag,
-  ExternalLink,
 } from "lucide-react";
 import type { DataPoint } from "@/types";
 import { formatRelativeDate, truncate } from "@/lib/utils";
@@ -78,20 +77,6 @@ export default function VerifiedDataCard({
           <Clock className="h-3.5 w-3.5" />
           Updated {formatRelativeDate(dataPoint.updated_at)}
         </span>
-
-        {/* Source link */}
-        {dataPoint.source_url && (
-          <a
-            href={dataPoint.source_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1 text-sl-blue-500 hover:text-sl-blue-600"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            Source
-          </a>
-        )}
       </div>
 
       {/* Tags */}
