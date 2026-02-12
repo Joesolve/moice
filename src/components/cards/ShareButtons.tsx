@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Share2, Check, Link as LinkIcon } from "lucide-react";
 
 interface ShareButtonsProps {
@@ -10,16 +10,17 @@ interface ShareButtonsProps {
   dataPointId: string;
 }
 
-const SITE_URL = typeof window !== "undefined" ? window.location.origin : "https://knowledgehub.gov.sl";
-
-function getShareUrl(id: string) {
-  return `${SITE_URL}/?dp=${id}`;
-}
+const FALLBACK_URL = "https://knowledgehub.gov.sl";
 
 export default function ShareButtons({ title, summary, dataPointId }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
+  const [siteUrl, setSiteUrl] = useState(FALLBACK_URL);
 
-  const url = getShareUrl(dataPointId);
+  useEffect(() => {
+    setSiteUrl(window.location.origin);
+  }, []);
+
+  const url = `${siteUrl}/?dp=${dataPointId}`;
   const text = `${title} - ${summary}`;
 
   const shareLinks = [
