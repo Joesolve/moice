@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  /* Sierra Leone Government Branding */
+  --color-sl-green-50: #ecfdf5;
+  --color-sl-green-100: #d1fae5;
+  --color-sl-green-200: #a7f3d0;
+  --color-sl-green-300: #6ee7b7;
+  --color-sl-green-400: #34d399;
+  --color-sl-green-500: #1B8340;
+  --color-sl-green-600: #166534;
+  --color-sl-green-700: #14532d;
+  --color-sl-green-800: #0f3d21;
+  --color-sl-green-900: #0a2614;
+
+  --color-sl-blue-50: #eff6ff;
+  --color-sl-blue-100: #dbeafe;
+  --color-sl-blue-200: #bfdbfe;
+  --color-sl-blue-300: #93c5fd;
+  --color-sl-blue-400: #60a5fa;
+  --color-sl-blue-500: #1746A2;
+  --color-sl-blue-600: #123b87;
+  --color-sl-blue-700: #0e306d;
+  --color-sl-blue-800: #0a2353;
+  --color-sl-blue-900: #061639;
+
+  --color-sl-white: #ffffff;
+  --color-sl-gray-50: #f9fafb;
+  --color-sl-gray-100: #f3f4f6;
+  --color-sl-gray-200: #e5e7eb;
+  --color-sl-gray-300: #d1d5db;
+  --color-sl-gray-400: #9ca3af;
+  --color-sl-gray-500: #6b7280;
+  --color-sl-gray-600: #4b5563;
+  --color-sl-gray-700: #374151;
+  --color-sl-gray-800: #1f2937;
+  --color-sl-gray-900: #111827;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-sl-blue-500);
+  outline-offset: 2px;
+}
+
+/* Utility for the search pulse animation */
+@keyframes search-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-search-pulse {
+  animation: search-pulse 1.5s ease-in-out infinite;
+}
