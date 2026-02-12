@@ -8,6 +8,7 @@ import MinistriesView from "@/components/admin/MinistriesView";
 import AuditTrailView from "@/components/admin/AuditTrailView";
 import ReportsView from "@/components/admin/ReportsView";
 import CategoriesView from "@/components/admin/CategoriesView";
+import CivicEducationView from "@/components/admin/CivicEducationView";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { Menu } from "lucide-react";
 
@@ -29,6 +30,7 @@ function AdminContent() {
     reports: <ReportsView />,
     categories: <CategoriesView />,
     ministries: <MinistriesView />,
+    "civic-education": <CivicEducationView />,
     audit: <AuditTrailView />,
   };
 

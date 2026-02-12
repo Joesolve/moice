@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   FileBarChart,
   Tag,
+  GraduationCap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/context";
@@ -27,6 +28,7 @@ const navItems = [
   { id: "reports", label: "Ministry Reports", icon: FileBarChart },
   { id: "categories", label: "Categories", icon: Tag },
   { id: "ministries", label: "Ministries", icon: Building2 },
+  { id: "civic-education", label: "Civic Education", icon: GraduationCap },
   { id: "audit", label: "Audit Trail", icon: History },
 ];
 

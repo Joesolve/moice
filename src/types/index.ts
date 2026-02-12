@@ -81,6 +81,15 @@ export interface MinistryReport {
   published_at: string | null;
 }
 
+export interface CivicEducationTopic {
+  id: string;
+  title: string;
+  summary: string;
+  content: string[];
+  created_at: string;
+  updated_at: string;
+}
+
 export interface NewsArticle {
   id: string;
   title: string;
