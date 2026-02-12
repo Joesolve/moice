@@ -10,18 +10,16 @@ import type { FilterValues } from "@/components/search/FilterBar";
 import StatsBar from "@/components/cards/StatsBar";
 import { searchMockData, MOCK_DATA_POINTS, MINISTRIES } from "@/lib/mock-data";
 import type { DataPoint } from "@/types";
-import { Shield, FileCheck, Eye, SlidersHorizontal } from "lucide-react";
+import { Shield, FileCheck, Eye } from "lucide-react";
 
 export default function HomePage() {
   const [results, setResults] = useState<DataPoint[]>([]);
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterValues>({
     ministryId: "",
-    dateFrom: "",
-    dateTo: "",
+    date: "",
   });
 
   const runSearch = useCallback(
@@ -33,8 +31,7 @@ export default function HomePage() {
         const found = searchMockData({
           query: searchQuery,
           ministryId: currentFilters.ministryId || undefined,
-          dateFrom: currentFilters.dateFrom || undefined,
-          dateTo: currentFilters.dateTo || undefined,
+          dateFrom: currentFilters.date || undefined,
         });
         setResults(found);
         setIsLoading(false);
@@ -59,31 +56,20 @@ export default function HomePage() {
     [query, runSearch]
   );
 
-  const hasActiveFilters =
-    filters.ministryId || filters.dateFrom || filters.dateTo;
-
-  const activeFilterCount = [
-    filters.ministryId,
-    filters.dateFrom,
-    filters.dateTo,
-  ].filter(Boolean).length;
+  const hasActiveFilters = filters.ministryId || filters.date;
 
   const verifiedCount = MOCK_DATA_POINTS.filter(
     (dp) => dp.status === "verified"
   ).length;
 
-  // Build a human-readable filter description
   const filterDescription = () => {
     const parts: string[] = [];
     if (filters.ministryId) {
       const m = MINISTRIES.find((m) => m.id === filters.ministryId);
       if (m) parts.push(m.abbreviation);
     }
-    if (filters.dateFrom || filters.dateTo) {
-      if (filters.dateFrom && filters.dateTo)
-        parts.push(`${filters.dateFrom} to ${filters.dateTo}`);
-      else if (filters.dateFrom) parts.push(`from ${filters.dateFrom}`);
-      else parts.push(`until ${filters.dateTo}`);
+    if (filters.date) {
+      parts.push(filters.date);
     }
     return parts.length ? parts.join(", ") : "";
   };
@@ -114,39 +100,14 @@ export default function HomePage() {
             {/* Search */}
             <div id="search" className="mx-auto max-w-2xl">
               <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+            </div>
 
-              {/* Filter toggle */}
-              <div className="mt-3 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => setShowFilters((prev) => !prev)}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
-                    showFilters || hasActiveFilters
-                      ? "bg-white text-sl-green-700"
-                      : "bg-white/10 text-white hover:bg-white/20"
-                  }`}
-                >
-                  <SlidersHorizontal className="h-3.5 w-3.5" />
-                  Filter by Ministry & Date
-                  {activeFilterCount > 0 && (
-                    <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-sl-green-500 text-[10px] font-bold text-white">
-                      {activeFilterCount}
-                    </span>
-                  )}
-                </button>
-              </div>
+            {/* Filters — always visible */}
+            <div className="mx-auto mt-4 max-w-2xl">
+              <FilterBar filters={filters} onChange={handleFilterChange} />
             </div>
           </div>
         </section>
-
-        {/* Filter bar (collapsible) */}
-        {showFilters && (
-          <section className="border-b border-sl-gray-200 bg-sl-gray-50 px-4 py-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-4xl">
-              <FilterBar filters={filters} onChange={handleFilterChange} />
-            </div>
-          </section>
-        )}
 
         {/* Trust pillars */}
         <section className="border-b border-sl-gray-200 bg-white px-4 py-8 sm:px-6 lg:px-8">
