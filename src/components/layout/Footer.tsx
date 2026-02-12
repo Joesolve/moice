@@ -33,6 +33,11 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="/civic-education" className="hover:text-white">
+                  Civic Education
+                </a>
+              </li>
+              <li>
                 <a href="/login" className="hover:text-white">
                   Sign In
                 </a>

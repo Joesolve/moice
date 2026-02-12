@@ -42,6 +42,12 @@ export default function Header() {
               News &amp; Reports
             </Link>
             <Link
+              href="/civic-education"
+              className="text-sm font-medium text-white/90 transition-colors hover:text-white"
+            >
+              Civic Education
+            </Link>
+            <Link
               href="/login"
               className="rounded-md bg-sl-blue-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sl-blue-600"
             >
@@ -75,6 +81,13 @@ export default function Header() {
               onClick={() => setMobileOpen(false)}
             >
               News &amp; Reports
+            </Link>
+            <Link
+              href="/civic-education"
+              className="block py-2 text-sm font-medium text-white/90"
+              onClick={() => setMobileOpen(false)}
+            >
+              Civic Education
             </Link>
             <Link
               href="/login"
