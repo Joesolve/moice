@@ -17,10 +17,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MOCK_DATA_POINTS, MINISTRIES, MOCK_MINISTRY_REPORTS } from "@/lib/mock-data";
+import { MOCK_DATA_POINTS, MOCK_MINISTRY_REPORTS } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/context";
 import { useCategories } from "@/lib/categories/context";
+import { useMinistries } from "@/lib/ministries/context";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import type { DataPointStatus, ReportStatus } from "@/types";
 
@@ -101,6 +102,7 @@ export default function ContributorPage() {
 function ContributorContent() {
   const { user, logout } = useAuth();
   const { categories } = useCategories();
+  const { ministries } = useMinistries();
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<"facts" | "reports">("facts");
   const [view, setView] = useState<"list" | "new" | "success">("list");
@@ -121,7 +123,7 @@ function ContributorContent() {
   const [reportType, setReportType] = useState<"quarterly" | "annual" | "special" | "update">("quarterly");
   const [reportPeriod, setReportPeriod] = useState("");
 
-  const currentMinistry = MINISTRIES.find((m) => m.id === selectedMinistry);
+  const currentMinistry = ministries.find((m) => m.id === selectedMinistry);
 
   // Filter items by selected ministry
   const myItems = MOCK_DATA_POINTS.filter((dp) => dp.ministry_id === selectedMinistry);
@@ -198,7 +200,7 @@ function ContributorContent() {
             onChange={(e) => setSelectedMinistry(e.target.value)}
             className="h-11 w-full rounded-lg border border-sl-gray-300 px-3 text-sm font-medium text-sl-gray-900 focus:border-sl-green-500 focus:outline-none focus:ring-2 focus:ring-sl-green-500/20"
           >
-            {MINISTRIES.map((m) => (
+            {ministries.map((m) => (
               <option key={m.id} value={m.id}>
                 {m.abbreviation} — {m.name}
               </option>

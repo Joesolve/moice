@@ -8,9 +8,11 @@ import {
   TrendingUp,
   Building2,
 } from "lucide-react";
-import { MOCK_DATA_POINTS, MINISTRIES } from "@/lib/mock-data";
+import { MOCK_DATA_POINTS } from "@/lib/mock-data";
+import { useMinistries } from "@/lib/ministries/context";
 
 export default function DashboardView() {
+  const { ministries } = useMinistries();
   const verified = MOCK_DATA_POINTS.filter((d) => d.status === "verified");
   const pending = MOCK_DATA_POINTS.filter((d) => d.status === "pending_review");
   const drafts = MOCK_DATA_POINTS.filter((d) => d.status === "draft");
@@ -39,7 +41,7 @@ export default function DashboardView() {
     },
     {
       label: "Ministries Active",
-      value: MINISTRIES.length,
+      value: ministries.length,
       icon: Building2,
       color: "text-purple-600",
       bg: "bg-purple-50",
